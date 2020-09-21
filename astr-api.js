@@ -1,49 +1,57 @@
 const request = require('request');
 
-module.exports = function Astr(jwt){
+module.exports = {
 
-    let that = this;
+    setJWT(jwt){
 
-    this.jwt = jwt;
+        if(typeof jwt === 'undefined') return console.error('JWT needed');
 
-    this.host = 'astr.me';
+        let that = this;
 
-    this.toObject = (string) => {
+        this.jwt = jwt;
 
-        try{
+        this.host = 'astr.me';
 
-            let obj = JSON.parse(string);
-            return obj;
+        this.toObject = (string) => {
 
-        } catch(e){
+            try{
 
-            throw e;
+                let obj = JSON.parse(string);
+                return obj;
+
+            } catch(e){
+
+                throw e;
+
+            }
 
         }
 
-    }
+        this.tree = () => {
 
-    this.tree = () => {
+            return new Promise((resolve, reject) => {
 
-        return new Promise((resolve, reject) => {
+                request.get({
 
-            request.get({
+                    url: `https://${that.host}/api/lunastro/tree`,
 
-                url: `https://${that.host}/api/lunastro/tree`,
+                    headers:{
+                        'Authorization': `Bearer ${that.jwt}`,
+                    }
 
-                headers:{
-                    'Authorization': `Bearer ${that.jwt}`,
-                }
+                }, (err, body, res) => {
 
-            }, (err, body, res) => {
+                    if(err) return reject(err);
 
-                if(err) return reject(err);
+                    resolve(that.toObject(res).message);
 
-                resolve(that.toObject(res).message);
+                });
 
             });
 
-        });
+        }
+
+        return that;
 
     }
 
