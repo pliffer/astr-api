@@ -51,6 +51,34 @@ module.exports = {
 
         }
 
+        this.createChild = (data) => {
+
+            data.action = 'create_child';
+
+            return new Promise((resolve, reject) => {
+
+                request.post({
+
+                    url: `https://${that.host}/api/lunastro`,
+                    json: {
+
+                        jwt: that.jwt,
+                        data: data
+
+                    }
+
+                }, (err, body, res) => {
+
+                    if(err) return reject(err);
+
+                    resolve(res);
+
+                });
+
+            });
+
+        }
+
         return that;
 
     }
