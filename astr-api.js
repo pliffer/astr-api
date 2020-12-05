@@ -1,6 +1,12 @@
 const request = require('request');
 
-module.exports = {
+module.exports = class {
+
+    constructor(jwt){
+
+        this.setJWT(jwt);
+
+    }
 
     setJWT(jwt){
 
@@ -84,3 +90,4 @@ module.exports = {
     }
 
 }
+
